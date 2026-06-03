@@ -50,10 +50,10 @@
     </nav>
     <h1>How's the sky looking today?</h1>
     <div>
-      <form>
-        <input class="search-input" label="Location"
+      <form id="location-form">
+        <input class="search-input" id= "location-name" label="Location"
           placeholder="Search for a city, e.g., New York" />
-        <button type="Submit">Search</button>
+        <button type="Submit" onClick="">Search</button>
       </form>
     </div>
 
@@ -63,7 +63,7 @@
     <div class="row" style="background-color:chartreuse">
       <div class="column col-12 col-md-8">
         <div style="color:whitesmoke ;background: blue; margin: 0 auto;">
-          <h3>Big weather display</h3>
+          <h3>Big weather display</h3> 
           <h4>Location: <span id="location-name"></span></h4>
           <h4>Temperature: <span id="temperature"></span></h4>       
         </div>
@@ -128,6 +128,7 @@
     Coded by <a href="#">Your Name Here</a>.
   </footer>
   <script src="apiweather.js"></script>
+  <script src="city2latlong.js"></script>
 </body>
 
 </html>

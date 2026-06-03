@@ -1,5 +1,4 @@
-const city_name = document.getElementById('city-name');
-const city_name = 'London';
+const city_name = document.getElementById('location-name').value;
 const API_URL = `https://geocoding-api.open-meteo.com/v1/search?q=${city_name}&count=1&language=en&format=json`;
 
 let latitude = "";
@@ -21,3 +20,9 @@ const fetchCityLatLong = async () => {
 }
 
 fetchCityLatLong();
+
+const form = document.getElementById("location-form");
+form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    fetchCityLatLong();
+});
