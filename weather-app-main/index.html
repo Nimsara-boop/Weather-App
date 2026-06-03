@@ -24,7 +24,7 @@
   </style>
 </head>
 
-<body>
+<body style="background-color: rgb(1, 1, 33);">
   <header class="container">
 
     <nav>
@@ -51,9 +51,9 @@
     <h1>How's the sky looking today?</h1>
     <div>
       <form id="location-form">
-        <input class="search-input" id= "location-name" label="Location"
+        <input class="search-input" id= "location-name-input" label="Location"
           placeholder="Search for a city, e.g., New York" />
-        <button type="Submit" onClick="">Search</button>
+        <button type="submit">Search</button>
       </form>
     </div>
 
@@ -69,23 +69,27 @@
         </div>
 
         <div class="row">
-          <div class="column col-6 col-md-3">
+
+          <div class="column col-6 col-md-3" style="background-color: rgb(251, 82, 82);">
             Feels like
-            <!-- Insert temperature here -->
+            <div id=""><span id="feels-like"></span></div>
           </div>
 
-          <div class="column col-6 col-md-3">
+          <div class="column col-6 col-md-3" style="background-color: rgb(222, 251, 171);">
             Humidity
-            <!-- Insert humidity here -->
+            <div id=""><span id="humidity"></span></div>
           </div>
 
-          <div class="column col-6 col-md-3">
+          <div class="column col-6 col-md-3" style="background-color: rgb(186, 156, 254);">
             Wind
+            <div id=""><span id="wind-speed"></span></div>
+
             <!-- Insert wind here -->
           </div>
 
-          <div class="column col-6 col-md-3">
+          <div class="column col-6 col-md-3" style="background-color:rgb(144, 225, 255)">
             Precipitation
+            <div id=""><span id="precipitation"></span></div>
             <!-- Insert precipitation here -->
           </div>
         </div>
@@ -128,7 +132,6 @@
     Coded by <a href="#">Your Name Here</a>.
   </footer>
   <script src="apiweather.js"></script>
-  <script src="city2latlong.js"></script>
 </body>
 
 </html>
