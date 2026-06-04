@@ -86,13 +86,6 @@ const getUserCurrentTimeandDate = async () => {
     }
 }
 
-const init = async () => {
-    await fetchCurrentDailyWeather();
-    await fetchUserCurrentLocation();
-    getUserCurrentTimeandDate();
-}
-
-init();
 
 
 //--------Find the latitufe and longitude of a user input city.
@@ -117,6 +110,24 @@ const fetchCityLatLong = async () => {
     }
 }
 
+const fetchCurrentTime = async () => {
+    const response = await fetch(`https://timeapi.io/api/Time/current/coordinate?latitude=${latitude}&longitude=${longitude}`);
+    const data = await response.json();
+    let currentHour = data.hour;
+    let currentMinute = data.minute;
+    const currentDay = data.dayOfWeek;
+
+    if (currentHour <= 12) {
+        currentHour = `${currentHour}`;
+        document.getElementById('time').textContent = `${currentHour} : ${currentMinute} am`;
+
+    } else {
+        currentHour = currentHour - 12;
+        document.getElementById('time').textContent = `${currentHour} : ${currentMinute} pm`;
+    }
+
+    document.getElementById('day').textContent = currentDay;
+}
 //-----------------Fetching weather data using found latitude and longitudes of the input---------------
 const location_var = document.getElementById('location-name');
 const temperature_var = document.getElementById('temperature');
@@ -134,7 +145,7 @@ const fetchWeatherData = async () => {
         const weather_code = response_json.current.weather_code;
         const weather_icon = codetoIcon(weather_code);
         document.getElementById('weather').src = `./assets/images/${weather_icon}`;
-        location_var.textContent = `Lat: ${response_json.latitude}, Lon: ${response_json.longitude}`;
+        location_var.textContent = document.getElementById('location-name-input').value;
         temperature_var.textContent = response_json.hourly.temperature_2m[0];
         feels_like_var.textContent = response_json.hourly.apparent_temperature[0];
         humidity_var.textContent = response_json.hourly.relative_humidity_2m[0];
@@ -147,12 +158,21 @@ const fetchWeatherData = async () => {
 }
 
 
-
-
 const form = document.getElementById("location-form");
-form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    await fetchCityLatLong();
-    await fetchWeatherData();
-});
 
+const init = async () => {
+
+        await fetchCurrentDailyWeather();
+        await fetchUserCurrentLocation();
+        await getUserCurrentTimeandDate();
+        await fetchCurrentTime();
+        await fetchWeatherData();
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        await fetchCityLatLong();
+        await fetchWeatherData();
+        await fetchCurrentTime();
+    });
+}
+init();
