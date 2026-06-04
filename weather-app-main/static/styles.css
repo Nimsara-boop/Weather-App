@@ -1,0 +1,103 @@
+:root {
+    --primary-color: rgba(255, 254, 254, 0.146);
+    --secondary-color: hsl(233, 67%, 56%);
+    --primary-font: 'Bricolage Grotesque', sans-serif;
+    --secondary-font: 'DM Sans', sans-serif;
+}
+
+.navbar-brand {
+    width: 100px;
+}
+
+.units-icon {
+    width: 15px;
+    margin-right: 5px;
+}
+
+.value-change {
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    border-style: none;
+    color: white;
+    padding: 3px;
+    font-size: 12px;
+    font-family: var(--secondary-font);
+    font-weight: 500;
+    width: 50%;
+    height: auto;
+}
+
+.switch-option {
+    background-image: url('../assets/images/icon-units.svg');
+    background-position: left center;
+    padding-left: 20px;
+    background-size: 50px;
+}
+
+.main-heading {
+    font-family: var(--primary-font);
+    color: rgb(254, 254, 254);
+    font-size: 40px;
+    font-weight: 600;
+    text-align: center;
+    padding: 20px 20px;
+}
+
+.location-form {
+    padding: 20px 0px;
+}
+
+.search-input {
+    background-color: var(--primary-color);
+    border-style: none;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    color: rgb(255, 255, 255);
+    padding: 10px;
+    background-image: url('../assets/images/icon-search.svg');
+    background-size: 13px;
+    background-repeat:no-repeat;
+    background-position: 20px center;
+}
+
+.search-input::placeholder {
+    color: rgb(255, 255, 255, 0.8);
+    font-family: var(--secondary-font);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0 30px;
+}
+
+.search-input-button {
+    background-color: var(--secondary-color);
+    color: white;
+    border-style: none;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:20px;
+    font-family:var(--secondary-font);
+    font-weight:500;
+}
+
+.today-forecast {
+    background-image:url('../assets/images/bg-today-small.svg');
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+    border-radius: 10px;
+    padding: 50px;
+    color: white;
+    font-family: var(--secondary-font);
+    font-weight: 500;
+    text-align: center;
+}
+
+.weather-boxes{
+    background-color:var(--primary-color);
+    border-radius:10px;
+    margin-bottom:10px;
+    color:white;
+    padding:5px;
+    font-size:13px;
+    border-color: aliceblue;
+    border-width: 2px;
+}

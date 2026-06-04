@@ -8,7 +8,6 @@ const fetchCityLatLong = async () => {
         //reading the input city name
         const city_name = document.getElementById('location-name-input').value;
 
-        //changing URL accordingly
         const API_latlong_URL = `https://geocoding-api.open-meteo.com/v1/search?name=${city_name}&count=1&language=en&format=json`;
 
         //call and fetch responses
@@ -34,26 +33,60 @@ const wind_speed_var = document.getElementById('wind-speed');
 const precipitation_var = document.getElementById('precipitation');
 
 const fetchWeatherData = async () => {
-    try{
-        const API_weather_URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,apparent_temperature`;
+    try {
+        const API_weather_URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,apparent_temperature&current=weather_code`;
         const response = await fetch(API_weather_URL);
         const response_json = await response.json();
         console.log(response_json);
-        location_var.textContent =`Lat: ${response_json.latitude}, Lon: ${response_json.longitude}`;
+        location_var.textContent = `Lat: ${response_json.latitude}, Lon: ${response_json.longitude}`;
         temperature_var.textContent = response_json.hourly.temperature_2m[0];
         feels_like_var.textContent = response_json.hourly.apparent_temperature[0];
         humidity_var.textContent = response_json.hourly.relative_humidity_2m[0];
         wind_speed_var.textContent = response_json.hourly.wind_speed_10m[0];
         precipitation_var.textContent = response_json.hourly.precipitation_probability[0];
     }
-    catch(error){
+    catch (error) {
         console.error('Fetching weather data error:', error);
     }
 }
+
+
+//-----------------Daily Forecast--------------------
+
+//----------getting user's date and time
+
+const fetchCurrentDateTimeandDailyWeather = async () => {
+    const now = new Date();
+
+    const nowHour = now.getHours();
+    const nowDay = now.getDay();
+    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const nowDayName = dayNames[nowDay];
+
+    console.log(nowHour);
+    console.log(nowDayName);
+
+    const next7Days = [];
+    for (let i = 0; i < 7; i++) {
+        next7Days.push(dayNames[(nowDay + i) % 7]); // % 7 wraps around (Sat → Sun)
+    }
+
+    console.log(next7Days);
+
+    const API_weather_daily_URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,apparent_temperature`;
+    const response_daily = await fetch(API_weather_daily_URL);
+    const response_daily_json = await response_daily.json();
+
+    for (let i = 0; i < 7; i++) {
+        document.getElementById(`Day-${i}-name`).textContent = next7Days[i];
+        document.getElementById(`Day-${i}-daily-focus`).textContent = response_daily_json.current.weather_code[i * 24]; 
+    }
+};
 
 const form = document.getElementById("location-form");
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
     await fetchCityLatLong();
     await fetchWeatherData();
+    await fetchCurrentDateTimeandDailyWeather();
 });
