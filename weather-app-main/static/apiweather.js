@@ -54,14 +54,14 @@ const fetchCurrentDailyWeather = async () => {
     //----4. function to call api, set the lat and long
     const user_weather_code = response_user_temp_json.current.weather_code;
     const weather_icon = codetoIcon(user_weather_code);
-    document.getElementById('weather').src = `./assets/images/${weather_icon}`;
+   document.getElementById('weather').src = `./assets/images/${weather_icon}`;
 }
 
 const fetchUserCurrentLocation = async () => {
-    const locationfindingAPI = `http://api.openweathermap.org/geo/1.0/reverse?lat=${user_latitude}&lon=${user_longitude}&limit={limit}&appid={OPENWEATHER_API_KEY}`;
+    const locationfindingAPI = `http://api.openweathermap.org/geo/1.0/reverse?lat=${user_latitude}&lon=${user_longitude}&limit=1&appid=${OPENWEATHER_API_KEY}`;
     const response_location = await fetch(locationfindingAPI);
     const response_location_json = await response_location.json();
-    console.log(response_location_json);
+    document.getElementById('location-name').textContent = response_location_json[0].name;
 }
 
 const getUserCurrentTimeandDate = async () => {
@@ -97,9 +97,9 @@ const getUserCurrentTimeandDate = async () => {
 }
 
 const init = async () => {
-fetchCurrentDailyWeather();
-getUserCurrentTimeandDate();
+await fetchCurrentDailyWeather();
 await fetchUserCurrentLocation();
+getUserCurrentTimeandDate();
 }
 
 init();
