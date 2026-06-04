@@ -3,6 +3,8 @@
 *.fig
 *.xd
 
+.env
+
 # Dependencies
 /node_modules
 /.pnp

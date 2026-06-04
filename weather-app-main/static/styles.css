@@ -91,6 +91,9 @@
     text-align: center;
 }
 
+.today-forecast img{
+    width:50%;
+}
 .weather-boxes{
     background-color:var(--primary-color);
     border-radius:10px;
