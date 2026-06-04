@@ -3,6 +3,7 @@
 let latitude = "";
 let longitude = "";
 
+let current_col="";
 //-----------------Daily Forecast--------------------
 
 //----* ---- function to convert weather codes to icons
@@ -51,7 +52,7 @@ const fetchUserCurrentLocation = async () => {
     const locationfindingAPI = `http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${OPENWEATHER_API_KEY}`;
     const response_location = await fetch(locationfindingAPI);
     const response_location_json = await response_location.json();
-    document.getElementById('location-name').textContent = response_location_json[0].name;
+    current_loc = response_location_json[0].name;
 }
 
 const getUserCurrentTimeandDate = async () => {
@@ -102,8 +103,7 @@ const fetchCityLatLong = async () => {
         console.log("full API response:", response_json);
         latitude = response_json.results[0].latitude;
         longitude = response_json.results[0].longitude;
-        console.log('latitude: ', latitude);
-        console.log('longitude: ', longitude);
+
     }
     catch (error) {
         console.error('Fetching city coordinates error:', error);
@@ -145,7 +145,7 @@ const fetchWeatherData = async () => {
         const weather_code = response_json.current.weather_code;
         const weather_icon = codetoIcon(weather_code);
         document.getElementById('weather').src = `./assets/images/${weather_icon}`;
-        location_var.textContent = document.getElementById('location-name-input').value;
+        location_var.textContent = document.getElementById('location-name-input').value==""? current_loc : document.getElementById('location-name-input').value;
         temperature_var.textContent = response_json.hourly.temperature_2m[0];
         feels_like_var.textContent = response_json.hourly.apparent_temperature[0];
         humidity_var.textContent = response_json.hourly.relative_humidity_2m[0];
@@ -167,6 +167,8 @@ const init = async () => {
         await getUserCurrentTimeandDate();
         await fetchCurrentTime();
         await fetchWeatherData();
+        await fetchCityLatLong();
+
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();

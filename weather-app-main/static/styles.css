@@ -89,11 +89,13 @@
     font-family: var(--secondary-font);
     font-weight: 500;
     text-align: center;
+    margin-bottom:20px;
 }
 
 .today-forecast img{
     width:50%;
 }
+
 .weather-boxes{
     background-color:var(--primary-color);
     border-radius:10px;
@@ -103,4 +105,12 @@
     font-size:13px;
     border-color: aliceblue;
     border-width: 2px;
+    height: 100px;
+    width: 50%;
+    font-weight: 700;
+}
+
+.weather-boxes div{
+    font-size: 30px;
+    font-weight: 200;
 }
