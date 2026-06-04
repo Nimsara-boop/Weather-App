@@ -3,14 +3,26 @@
 let latitude = "";
 let longitude = "";
 
-let user_latitude = "";
-let user_longitude = "";
-
 //-----------------Daily Forecast--------------------
 
-
+//----* ---- function to convert weather codes to icons
+const codetoIcon = (code) => {
+    if (code === 0) return 'icon-sunny.webp';
+    if (code === 1) return 'icon-sunny.webp';
+    if (code === 2) return 'icon-partly-cloudy.webp';
+    if (code === 3) return 'icon-overcast.webp';
+    if (code >= 45 && code <= 48) return 'icon-fog.webp';
+    if (code >= 51 && code <= 57) return 'icon-drizzle.webp';
+    if (code >= 61 && code <= 67) return 'icon-rain.webp';
+    if (code >= 71 && code <= 77) return 'icon-snow.webp';
+    if (code >= 80 && code <= 82) return 'icon-rain.webp';
+    if (code >= 85 && code <= 86) return 'icon-snow.webp';
+    if (code >= 95 && code <= 99) return 'icon-storm.webp';
+    return 'icon-overcast.webp';                       // fallback
+};
 
 //----------getting user's date time 
+// ----fetchCurrentDailyWeather()--- 1. , 
 // 1. await navigator.geolocation.getCurrentPosition ----- get the user's current latitude and longitude
 // 2. getUserCurrentTempandWeather() ----- get the user's current (1.)temperature and (2.)weather using await navigator.geolocation.getCurrentPosition and display
 // 3. getgetUserCurrentTimeandDate() ----- get the user's current time and date from the Date() JS object and display
@@ -23,42 +35,20 @@ const fetchCurrentDailyWeather = async () => {
         navigator.geolocation.getCurrentPosition(resolve, reject);
     });
 
-    user_latitude = position.coords.latitude;
-    user_longitude = position.coords.longitude;
+    latitude = position.coords.latitude;
+    longitude = position.coords.longitude;
 
     //------2.--- getting temp and weather. display user's current temp
-    const response_user_temp = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${user_latitude}&longitude=${user_longitude}&current=temperature_2m,weather_code`);
+    const response_user_temp = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code`);
 
     const response_user_temp_json = await response_user_temp.json();
     const user_temperature = response_user_temp_json.current.temperature_2m;
 
     document.getElementById('temperature').textContent = user_temperature;
-
-
-    //----3. ---- function to convert weather codes to icons
-    const codetoIcon = (code) => {
-        if (code === 0) return 'icon-sunny.webp';
-        if (code === 1) return 'icon-sunny.webp';
-        if (code === 2) return 'icon-partly-cloudy.webp';
-        if (code === 3) return 'icon-overcast.webp';
-        if (code >= 45 && code <= 48) return 'icon-fog.webp';
-        if (code >= 51 && code <= 57) return 'icon-drizzle.webp';
-        if (code >= 61 && code <= 67) return 'icon-rain.webp';
-        if (code >= 71 && code <= 77) return 'icon-snow.webp';
-        if (code >= 80 && code <= 82) return 'icon-rain.webp';
-        if (code >= 85 && code <= 86) return 'icon-snow.webp';
-        if (code >= 95 && code <= 99) return 'icon-storm.webp';
-        return 'icon-overcast.webp';                       // fallback
-    };
-
-    //----4. function to call api, set the lat and long
-    const user_weather_code = response_user_temp_json.current.weather_code;
-    const weather_icon = codetoIcon(user_weather_code);
-   document.getElementById('weather').src = `./assets/images/${weather_icon}`;
 }
 
 const fetchUserCurrentLocation = async () => {
-    const locationfindingAPI = `http://api.openweathermap.org/geo/1.0/reverse?lat=${user_latitude}&lon=${user_longitude}&limit=1&appid=${OPENWEATHER_API_KEY}`;
+    const locationfindingAPI = `http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${OPENWEATHER_API_KEY}`;
     const response_location = await fetch(locationfindingAPI);
     const response_location_json = await response_location.json();
     document.getElementById('location-name').textContent = response_location_json[0].name;
@@ -92,17 +82,18 @@ const getUserCurrentTimeandDate = async () => {
 
     for (let i = 0; i < 7; i++) {
         document.getElementById(`Day-${i}-name`).textContent = next7Days[i];
-        document.getElementById(`Day-${i}-daily-forecast`).textContent = response_daily_json.current.weather_code[i * 24];
+        //document.getElementById(`Day-${i}-daily-forecast`).textContent = response_daily_json.current.weather_code[i * 24];
     }
 }
 
 const init = async () => {
-await fetchCurrentDailyWeather();
-await fetchUserCurrentLocation();
-getUserCurrentTimeandDate();
+    await fetchCurrentDailyWeather();
+    await fetchUserCurrentLocation();
+    getUserCurrentTimeandDate();
 }
 
 init();
+
 
 //--------Find the latitufe and longitude of a user input city.
 const fetchCityLatLong = async () => {
@@ -139,7 +130,10 @@ const fetchWeatherData = async () => {
         const API_weather_URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,apparent_temperature&current=weather_code`;
         const response = await fetch(API_weather_URL);
         const response_json = await response.json();
-        console.log(response_json);
+        //----4. function to call api, set the lat and long
+        const weather_code = response_json.current.weather_code;
+        const weather_icon = codetoIcon(weather_code);
+        document.getElementById('weather').src = `./assets/images/${weather_icon}`;
         location_var.textContent = `Lat: ${response_json.latitude}, Lon: ${response_json.longitude}`;
         temperature_var.textContent = response_json.hourly.temperature_2m[0];
         feels_like_var.textContent = response_json.hourly.apparent_temperature[0];
