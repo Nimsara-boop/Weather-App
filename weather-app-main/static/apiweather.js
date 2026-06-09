@@ -102,6 +102,18 @@ const fetchCityLatLong = async () => {
         console.log("full API response:", response_json);
         latitude = response_json.results[0].latitude;
         longitude = response_json.results[0].longitude;
+
+            // fetch weather information for the next 7 days 
+    const API_weather_daily_URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,apparent_temperature,weather_code`;
+    const response_daily = await fetch(API_weather_daily_URL);
+    const response_daily_json = await response_daily.json();
+
+    // display weather information for the next 7 days 
+    for (let i = 0; i < 7; i++) {
+        //document.getElementById(`Day-${i}-name`).textContent = next7Days[i];
+        document.getElementById(`icon-day-${i}-forecast`).src = `./assets/images/${codetoIcon(response_daily_json.hourly.weather_code[i * 24])}`;
+    }
+
     }
     catch (error) {
         console.error('Fetching city coordinates error:', error);
