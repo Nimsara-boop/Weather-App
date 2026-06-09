@@ -152,18 +152,22 @@
 
       <!---Hourly forecast by the date of the week--->
       <div class="col-12 col-md-4">
-        <div class="hourly-forecast justify-content-between">
-          <h3>Hourly forecast</h3>
-          <select>
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
-          </select>
-          <!-- Insert hourly forecast for the selected day here -->
+        <div class="hourly-forecast container">
+          <span class="hourly-header justify-content-between align-items-center d-flex">
+            <h3>Hourly forecast</h3>
+            <select class="hourly-select">
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+            </select>
+          </span>
+          <div class="hourly-forcast-container" id="hourly-forecast-container">
+         <!---Duplicated by JS--->
+          </div>
         </div>
       </div>
 

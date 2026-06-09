@@ -3,7 +3,7 @@
 let latitude = "";
 let longitude = "";
 
-let current_col="";
+let current_col = "";
 //-----------------Daily Forecast--------------------
 
 //----* ---- function to convert weather codes to icons
@@ -81,12 +81,49 @@ const getUserCurrentTimeandDate = async () => {
     const API_weather_daily_URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,apparent_temperature,weather_code`;
     const response_daily = await fetch(API_weather_daily_URL);
     const response_daily_json = await response_daily.json();
+    console.log("full API response for the next 7 days:", response_daily_json);
 
     // display weather information for the next 7 days 
     for (let i = 0; i < 7; i++) {
+
+        // daily weather
         document.getElementById(`Day-${i}-name`).textContent = next7Days[i];
         document.getElementById(`icon-day-${i}-forecast`).src = `./assets/images/${codetoIcon(response_daily_json.hourly.weather_code[i * 24])}`;
+
     }
+
+    const container = document.getElementById('hourly-forecast-container');
+    container.innerHTML = '';
+
+    let min_temp=0;
+    let max_temp=0;
+    for (let j=0; j<7; j++){
+    for (let i = 0; i < 24; i++) {
+        // hourly weather and div setting
+        container.innerHTML += `
+            <div class="hourly-set">
+            <span>
+                <img class="hourly-icon" id="hourly-${i}-weather-icon" 
+                    src="./assets/images/${codetoIcon(response_daily_json.hourly.weather_code[i])}">
+                <span id="hourly-${i}-hour">${response_daily_json.hourly.time[i].split('T')[1].slice(0, 5)}</span>
+            </span>
+            <span class="hourly-temperature" id="hourly-${i}-temperature">
+                ${response_daily_json.hourly.temperature_2m[i]}°C
+            </span>
+        </div>
+        `;
+
+        if (response_daily_json.hourly.temperature_2m[i]<response_daily_json.hourly.temperature_2m[i+1]){
+            min_temp=response_daily_json.hourly.temperature_2m[i];
+        }
+        if (response_daily_json.hourly.temperature_2m[i]>response_daily_json.hourly.temperature_2m[i+1]){
+            max_temp=response_daily_json.hourly.temperature_2m[i];
+        }
+    }
+
+    document.getElementById(`min-temp-${j}`).textContent = `Min: ${min_temp}°C`;
+    document.getElementById(`max-temp-${j}`).textContent = `Max: ${max_temp}°C`;
+}
 }
 
 //--------Find the latitufe and longitude of a user input city.
@@ -103,16 +140,15 @@ const fetchCityLatLong = async () => {
         latitude = response_json.results[0].latitude;
         longitude = response_json.results[0].longitude;
 
-            // fetch weather information for the next 7 days 
-    const API_weather_daily_URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,apparent_temperature,weather_code`;
-    const response_daily = await fetch(API_weather_daily_URL);
-    const response_daily_json = await response_daily.json();
+        // fetch weather information for the next 7 days 
+        const API_weather_daily_URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,apparent_temperature,weather_code`;
+        const response_daily = await fetch(API_weather_daily_URL);
+        const response_daily_json = await response_daily.json();
 
-    // display weather information for the next 7 days 
-    for (let i = 0; i < 7; i++) {
-        //document.getElementById(`Day-${i}-name`).textContent = next7Days[i];
-        document.getElementById(`icon-day-${i}-forecast`).src = `./assets/images/${codetoIcon(response_daily_json.hourly.weather_code[i * 24])}`;
-    }
+        // display weather information for the next 7 days 
+        for (let i = 0; i < 7; i++) {
+            document.getElementById(`icon-day-${i}-forecast`).src = `./assets/images/${codetoIcon(response_daily_json.hourly.weather_code[i * 24])}`;
+        }
 
     }
     catch (error) {
@@ -154,7 +190,7 @@ const fetchWeatherData = async () => {
         const weather_code = response_json.current.weather_code;
         const weather_icon = codetoIcon(weather_code);
         document.getElementById('weather').src = `./assets/images/${weather_icon}`;
-        location_var.textContent = document.getElementById('location-name-input').value==""? current_loc : document.getElementById('location-name-input').value;
+        location_var.textContent = document.getElementById('location-name-input').value == "" ? current_loc : document.getElementById('location-name-input').value;
         temperature_var.textContent = `${response_json.hourly.temperature_2m[0]}°C`;
         feels_like_var.textContent = `${response_json.hourly.apparent_temperature[0]}°C`;
         humidity_var.textContent = `${response_json.hourly.relative_humidity_2m[0]}%`;
@@ -169,11 +205,11 @@ const fetchWeatherData = async () => {
 const form = document.getElementById("location-form");
 
 const init = async () => {
-        await fetchCurrentDailyWeather();
-        await fetchUserCurrentLocation();
-        await getUserCurrentTimeandDate();
-        await fetchCurrentTime();
-        await fetchWeatherData();
+    await fetchCurrentDailyWeather();
+    await fetchUserCurrentLocation();
+    await getUserCurrentTimeandDate();
+    await fetchCurrentTime();
+    await fetchWeatherData();
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
