@@ -29,14 +29,18 @@ const codetoIcon = (code) => {
 // 3. getgetUserCurrentTimeandDate() ----- get the user's current time and date from the Date() JS object and display
 //
 
-const loading = async () =>{
-    //----------Loading Screen
-    document.querySelector('.main-content').classList.add('loading');
-    document.querySelector('.loading').textContent = 'Loading...';
-}
+// const loading = async () =>{
+//     //----------Loading Screen
+//     document.querySelector('.main-content').classList.add('loading');
+//     document.querySelector('.loading').textContent = 'Loading...';
+// }
+
+// const removeLoading = async () =>{
+//     document.querySelector('.main-content').classList.remove('loading');
+// }
 
 const fetchCurrentDailyWeather = async () => {
-    
+
     //-----1.--- get the user's current lat and lang
     const position = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -44,18 +48,10 @@ const fetchCurrentDailyWeather = async () => {
 
     latitude = position.coords.latitude;
     longitude = position.coords.longitude;
-
-    //------2.--- getting temp and weather. display user's current temp
-    //const response_user_temp = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code`);
-
-    //const response_user_temp_json = await response_user_temp.json();
-    //const user_temperature = response_user_temp_json.current.temperature_2m;
-
-    //document.getElementById('temperature').textContent = `${user_temperature}°C`;
 }
 
 const fetchUserCurrentLocation = async () => {
-    const locationfindingAPI = `http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${OPENWEATHER_API_KEY}`;
+    const locationfindingAPI = `https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${OPENWEATHER_API_KEY}`;
     const response_location = await fetch(locationfindingAPI);
     const response_location_json = await response_location.json();
     current_loc = response_location_json[0].name;
@@ -63,13 +59,11 @@ const fetchUserCurrentLocation = async () => {
 
 const getUserCurrentTimeandDate = async () => {
     const now = new Date();
-
     const nowHour = now.getHours();
     const nowDay = now.getDay();
-    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const nowDayName = dayNames[nowDay];
 
-    document.querySelector('.main-content').classList.remove('loading');
     document.getElementById('day').textContent = nowDayName; // Display current date 
 
     if (nowHour <= 12) {
@@ -77,32 +71,29 @@ const getUserCurrentTimeandDate = async () => {
     }// Display current time
     else { document.getElementById('time').textContent = `${nowHour - 12}pm`; }
 
-
+    // find the current day of the week 
     const next7Days = [];
     for (let i = 0; i < 7; i++) {
-        next7Days.push(dayNames[(nowDay + i) % 7]); // % 7 wraps around (Sat → Sun)
+        next7Days.push(dayNames[(nowDay + i) % 7]); // % 7 to wrap around
     }
 
-    console.log(next7Days);
-
-    const API_weather_daily_URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,apparent_temperature`;
+    // fetch weather information for the next 7 days 
+    const API_weather_daily_URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,apparent_temperature,weather_code`;
     const response_daily = await fetch(API_weather_daily_URL);
     const response_daily_json = await response_daily.json();
 
+    // display weather information for the next 7 days 
     for (let i = 0; i < 7; i++) {
         document.getElementById(`Day-${i}-name`).textContent = next7Days[i];
-        document.getElementById(`Day-${i}-daily-forecast`).textContent = response_daily_json.current.weather_code[i * 24];
+        document.getElementById(`icon-day-${i}-forecast`).src = `./assets/images/${codetoIcon(response_daily_json.hourly.weather_code[i * 24])}`;
     }
 }
-
-
 
 //--------Find the latitufe and longitude of a user input city.
 const fetchCityLatLong = async () => {
     try {
         //reading the input city name
         const city_name = document.getElementById('location-name-input').value;
-
         const API_latlong_URL = `https://geocoding-api.open-meteo.com/v1/search?name=${city_name}&count=1&language=en&format=json`;
 
         //call and fetch responses
@@ -111,7 +102,6 @@ const fetchCityLatLong = async () => {
         console.log("full API response:", response_json);
         latitude = response_json.results[0].latitude;
         longitude = response_json.results[0].longitude;
-
     }
     catch (error) {
         console.error('Fetching city coordinates error:', error);
@@ -128,7 +118,6 @@ const fetchCurrentTime = async () => {
     if (currentHour <= 12) {
         currentHour = `${currentHour}`;
         document.getElementById('time').textContent = `${currentHour}.${currentMinute} am`;
-
     } else {
         currentHour = currentHour - 12;
         document.getElementById('time').textContent = `${currentHour}.${currentMinute} pm`;
@@ -165,18 +154,14 @@ const fetchWeatherData = async () => {
     }
 }
 
-
 const form = document.getElementById("location-form");
 
 const init = async () => {
-        await loading();
         await fetchCurrentDailyWeather();
         await fetchUserCurrentLocation();
         await getUserCurrentTimeandDate();
         await fetchCurrentTime();
         await fetchWeatherData();
-        await fetchCityLatLong();
-
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();

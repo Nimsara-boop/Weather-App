@@ -27,11 +27,11 @@
 </head>
 
 <body style="background-color: rgb(1, 1, 47);">
-  
+
   <header class="container">
 
-   <!----Navigation bar--->
-    <nav class="navbar navbar-expand">
+    <!----Navigation bar--->
+    <nav class="navbar navbar-expand-lg justify-content-between">
       <img class="navbar-brand" src="./assets/images/logo.svg" alt="logo icon" />
       <select class="value-change">
         <option value="switch-option">Units</option>
@@ -55,90 +55,95 @@
 
     <!---Search city input--->
     <h1 class="main-heading">How's the sky looking today?</h1>
-    <div class="container">
-      <form id="location-form" class="row">
-        <input class="search-input col-12" id="location-name-input" label="Location"
-          placeholder="Search for a place..." />
-        <button type="submit" class="search-input-button col-12">Search</button>
+    <div class="container form-div">
+      <form id="location-form" class="location-form">
+        <input class="search-input " id="location-name-input" label="Location" placeholder="Search for a place..." />
+        <button type="submit" class="search-input-button">Search</button>
       </form>
     </div>
 
   </header>
 
-  <main class="container main-content">
+  <main class="container">
     <div class="row">
       <div class="column col-12 col-md-8">
 
         <!---Big blue box with the weather and the daily forecast--->
-        <div class="today-forecast">
-          <div class="today-location"><span id="location-name"></span></div>
-          <div class="today-dateandtime"><span id="time"></span> <span id="day"></span></div>
-          <h1 class="today-temperature"><img id="weather" src="" alt="Weather icon"><span id="temperature"> C</span></h1>
-          
+        <div class="today-forecast container">
+          <div class="row">
+            <div class="col-12 col-md-8">
+              <div class="today-location"><span id="location-name"></span></div>
+              <div class="today-dateandtime"><span id="time"></span> <span id="day"></span></div>
+            </div>
+            <div class="col-12 col-md-4">
+              <h1 class="today-temperature"><img id="weather" src="" alt="Weather icon"><span id="temperature"> </span>
+              </h1>
+            </div>
+          </div>
         </div>
 
         <!---minor weather conditions-->
         <div class="container">
-          <div class="row gx-2">
-            <div class="column col-6 col-md-3 weather-boxes weather-boxes-row">
+          <div class="row justify-content-between">
+            <div class="column col-6 col-md-4 weather-boxes">
               Feels like
-              <div id=""><span id="feels-like"> </span></div>
+              <div class="minor-value"><span id="feels-like"> </span></div>
             </div>
 
-            <div class="column col-6 col-md-3 weather-boxes">
+            <div class="column col-6 col-md-4 weather-boxes">
               Humidity
-              <div id=""><span id="humidity"></span></div>
+              <div class="minor-value"><span id="humidity"></span></div>
             </div>
 
-            <div class="column col-6 col-md-3 weather-boxes">
+            <div class="column col-6 col-md-4 weather-boxes">
               Wind
-              <div id=""><span id="wind-speed"></span></div>
+              <div class="minor-value"><span id="wind-speed"></span></div>
             </div>
 
-            <div class="column col-6 col-md-3 weather-boxes">
+            <div class="column col-6 col-md-4 weather-boxes">
               Precipitation
-              <div id=""><span id="precipitation"></span></div>
+              <div class="minor-value"><span id="precipitation"></span></div>
             </div>
           </div>
         </div>
 
         <!---Daily forecast for the 7 days of the week--->
-        <div class="daily-forecast">
+        <div class="daily-forecast container">
           <h3>Daily forecast</h3>
-          <div class="row">
+          <div class="row justify-content-between align-items-center">
             <div class="col-4 col-md-1 daily-forcast-day">
               <h6 id="Day-0-name" class="day-name">____</h6>
-              <img id="icon-daily-forcast" src="../weather-app-main/assets/images/icon-drizzle.webp" alt="Weather icon">
+              <img class="daily-weather-icon" id="icon-day-0-forecast" src="" alt="Weather icon">
               <div class="justify-content-between"><span id="min-temp-0">m</span> <span id="max-temp-0">M</span></div>
             </div>
-            <div class="col-4 col-md-1 daily-forcast-day">
+            <div class=" daily-forcast-day">
               <h6 id="Day-1-name">____ </h6>
-              <img id="icon-daily-forcast" src="" alt="Weather icon">
+              <img class="daily-weather-icon" id="icon-day-1-forecast" src="" alt="Weather icon">
               <div><span id="min-temp-1"></span><span id="max-temp-1"></span></div>
             </div>
             <div class="col-4 col-md-1 daily-forcast-day">
               <h6 id="Day-2-name">____</h6>
-              <img id="icon-daily-forcast" src="" alt="Weather icon">
+              <img class="daily-weather-icon" id="icon-day-2-forecast" src="" alt="Weather icon">
               <div><span id="min-temp-2"></span><span id="max-temp-2"></span></div>
             </div>
             <div class="col-4 col-md-1 daily-forcast-day">
               <h6 id="Day-3-name">____</h6>
-              <img id="icon-daily-forcast" src="" alt="Weather icon">
+              <img class="daily-weather-icon" id="icon-day-3-forecast" src="" alt="Weather icon">
               <div><span id="min-temp-3"></span><span id="max-temp-3"></span></div>
             </div>
             <div class="col-4 col-md-1 daily-forcast-day">
               <h6 id="Day-4-name">____</h6>
-              <img id="icon-daily-forcast" src="" alt="Weather icon">
+              <img class="daily-weather-icon" id="icon-day-4-forecast" src="" alt="Weather icon">
               <div><span id="min-temp-4"></span><span id="max-temp-4"></span></div>
             </div>
             <div class="col-4 col-md-1 daily-forcast-day">
               <h6 id="Day-5-name">____</h6>
-              <img id="icon-daily-forcast" src="" alt="Weather icon">
+              <img class="daily-weather-icon" id="icon-day-5-forecast" src="" alt="Weather icon">
               <div><span id="min-temp-5"></span><span id="max-temp-5"></span></div>
             </div>
             <div class="col-4 col-md-1 daily-forcast-day">
               <h6 id="Day-6-name">____</h6>
-              <img id="icon-daily-forcast" src="" alt="Weather icon">
+              <img class="daily-weather-icon" id="icon-day-6-forecast" src="" alt="Weather icon">
               <div><span id="min-temp-6"></span><span id="max-temp-6"></span></div>
             </div>
           </div>
