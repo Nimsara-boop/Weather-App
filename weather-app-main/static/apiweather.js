@@ -22,6 +22,7 @@ const codetoIcon = (code) => {
     return 'icon-overcast.webp';                       // fallback
 };
 
+const daysoftheweek = []
 //----------getting user's date time 
 // ----fetchCurrentDailyWeather()--- 1. , 
 // 1. await navigator.geolocation.getCurrentPosition ----- get the user's current latitude and longitude
@@ -85,19 +86,19 @@ const getUserCurrentTimeandDate = async () => {
 
     // display weather information for the next 7 days 
     for (let i = 0; i < 7; i++) {
-
         // daily weather
         document.getElementById(`Day-${i}-name`).textContent = next7Days[i];
         document.getElementById(`icon-day-${i}-forecast`).src = `./assets/images/${codetoIcon(response_daily_json.hourly.weather_code[i * 24])}`;
+        // hourly weather day selector
+        document.getElementById(`hourly-day-${i}-name`).textContent = next7Days[i];
 
     }
 
     const container = document.getElementById('hourly-forecast-container');
     container.innerHTML = '';
 
-    let min_temp=0;
-    let max_temp=0;
-    for (let j=0; j<7; j++){
+    let min_temp = 0;
+    let max_temp = 0;
     for (let i = 0; i < 24; i++) {
         // hourly weather and div setting
         container.innerHTML += `
@@ -113,17 +114,37 @@ const getUserCurrentTimeandDate = async () => {
         </div>
         `;
 
-        if (response_daily_json.hourly.temperature_2m[i]<response_daily_json.hourly.temperature_2m[i+1]){
-            min_temp=response_daily_json.hourly.temperature_2m[i];
-        }
-        if (response_daily_json.hourly.temperature_2m[i]>response_daily_json.hourly.temperature_2m[i+1]){
-            max_temp=response_daily_json.hourly.temperature_2m[i];
-        }
+
+        document.getElementById('')
     }
 
-    document.getElementById(`min-temp-${j}`).textContent = `Min: ${min_temp}°C`;
-    document.getElementById(`max-temp-${j}`).textContent = `Max: ${max_temp}°C`;
+
+
+    // }
 }
+
+const findMinMaxTemp = async () => {
+
+
+    const API_weather_daily_URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,apparent_temperature,weather_code`;
+    const response_daily = await fetch(API_weather_daily_URL);
+    const response_daily_json = await response_daily.json();
+
+    for (j = 0; j < 7; j++) {
+        let min_temp = 10000;
+        let max_temp = -10000;
+        for (i = 0; i < 24; i++) {
+            if (response_daily_json.hourly.temperature_2m[j * 24 + i] < min_temp) {
+                min_temp = response_daily_json.hourly.temperature_2m[j * 24 + i];
+            }
+            if (response_daily_json.hourly.temperature_2m[j * 24 + i] > max_temp) {
+                max_temp = response_daily_json.hourly.temperature_2m[j * 24 + i];
+            }
+        }
+
+        document.getElementById(`min-temp-${j}`).textContent = `${Math.round(min_temp)}° `;
+        document.getElementById(`max-temp-${j}`).textContent = `${Math.round(max_temp)}°`;
+    }
 }
 
 //--------Find the latitufe and longitude of a user input city.
@@ -149,7 +170,6 @@ const fetchCityLatLong = async () => {
         for (let i = 0; i < 7; i++) {
             document.getElementById(`icon-day-${i}-forecast`).src = `./assets/images/${codetoIcon(response_daily_json.hourly.weather_code[i * 24])}`;
         }
-
     }
     catch (error) {
         console.error('Fetching city coordinates error:', error);
@@ -170,8 +190,11 @@ const fetchCurrentTime = async () => {
         currentHour = currentHour - 12;
         document.getElementById('time').textContent = `${currentHour}.${currentMinute} pm`;
     }
-
     document.getElementById('day').textContent = currentDay;
+    console.log("Current day is:", currentDay);
+    let nextDays = [];
+    //find currentDay
+    //nextDays.push
 }
 //-----------------Fetching weather data using found latitude and longitudes of the input---------------
 const location_var = document.getElementById('location-name');
@@ -203,13 +226,14 @@ const fetchWeatherData = async () => {
 }
 
 const form = document.getElementById("location-form");
-
+const hourlySelect = document.getElementById("hourly-select");
 const init = async () => {
     await fetchCurrentDailyWeather();
     await fetchUserCurrentLocation();
     await getUserCurrentTimeandDate();
     await fetchCurrentTime();
     await fetchWeatherData();
+    await findMinMaxTemp();
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -217,5 +241,11 @@ const init = async () => {
         await fetchWeatherData();
         await fetchCurrentTime();
     });
+
+    hourlySelect.addEventListener('change', async (event) => {
+        const selectedDay = event.target.value;
+
+    });
+
 }
 init();
