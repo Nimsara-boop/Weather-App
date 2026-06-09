@@ -5,6 +5,12 @@
     --secondary-font: 'DM Sans', sans-serif;
 }
 
+.main-content.loading{
+    display:none;
+    color:antiquewhite;
+    text-align: center;
+}
+
 .navbar-brand {
     width: 100px;
 }
@@ -84,12 +90,33 @@
     background-size:100% 100%;
     background-repeat:no-repeat;
     border-radius: 10px;
-    padding: 50px;
+    padding: 20px;
     color: white;
     font-family: var(--secondary-font);
     font-weight: 500;
     text-align: center;
     margin-bottom:20px;
+}
+
+.today-location{
+    font-weight:700;
+    font-size:30px;
+}
+
+.today-dateandtime{
+    font-size:12px;
+    font-weight:100;
+}
+
+.today-temperature{
+    font-size:40px;
+    font-weight:700;
+    font-style:italic;
+}
+
+.today-temperature img{
+    width:5px;
+    height:auto;
 }
 
 .today-forecast img{
@@ -106,11 +133,60 @@
     border-color: aliceblue;
     border-width: 2px;
     height: 100px;
-    width: 50%;
-    font-weight: 700;
+    font-weight: 200;
 }
 
 .weather-boxes div{
     font-size: 30px;
     font-weight: 200;
+}
+
+.daily-forecast {
+    border-radius: 10px;
+    padding: 20px;
+    color: white;
+    font-family: var(--secondary-font);
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.daily-forecast h3 {
+    font-family: var(--primary-font);
+    color: rgb(254, 254, 254);
+    font-size: 15px;
+    font-weight: 400;
+    text-align: left;
+    padding-bottom: 20px;
+}
+
+.daily-forcast-day {
+    background-color: var(--primary-color);
+    border-radius: 10px;
+    padding: 10px;
+    color: white;
+    font-family: var(--secondary-font);
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 10px;
+    height:130px;
+}
+
+#icon-daily-forcast {
+    width: 50px;
+    height: 50px;
+}
+
+.hourly-forecast{
+    background-color:var(--primary-color);
+    border-radius:10px;
+    padding:20px;
+}
+
+.hourly-forecast h3 {
+    font-family: var(--primary-font);
+    color: rgb(254, 254, 254);
+    font-size: 15px;
+    font-weight: 400;
+    text-align: left;
 }

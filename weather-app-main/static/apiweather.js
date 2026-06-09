@@ -29,8 +29,14 @@ const codetoIcon = (code) => {
 // 3. getgetUserCurrentTimeandDate() ----- get the user's current time and date from the Date() JS object and display
 //
 
-const fetchCurrentDailyWeather = async () => {
+const loading = async () =>{
+    //----------Loading Screen
+    document.querySelector('.main-content').classList.add('loading');
+    document.querySelector('.loading').textContent = 'Loading...';
+}
 
+const fetchCurrentDailyWeather = async () => {
+    
     //-----1.--- get the user's current lat and lang
     const position = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -40,12 +46,12 @@ const fetchCurrentDailyWeather = async () => {
     longitude = position.coords.longitude;
 
     //------2.--- getting temp and weather. display user's current temp
-    const response_user_temp = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code`);
+    //const response_user_temp = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code`);
 
-    const response_user_temp_json = await response_user_temp.json();
-    const user_temperature = response_user_temp_json.current.temperature_2m;
+    //const response_user_temp_json = await response_user_temp.json();
+    //const user_temperature = response_user_temp_json.current.temperature_2m;
 
-    document.getElementById('temperature').textContent = user_temperature;
+    //document.getElementById('temperature').textContent = `${user_temperature}°C`;
 }
 
 const fetchUserCurrentLocation = async () => {
@@ -62,6 +68,8 @@ const getUserCurrentTimeandDate = async () => {
     const nowDay = now.getDay();
     const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const nowDayName = dayNames[nowDay];
+
+    document.querySelector('.main-content').classList.remove('loading');
     document.getElementById('day').textContent = nowDayName; // Display current date 
 
     if (nowHour <= 12) {
@@ -83,7 +91,7 @@ const getUserCurrentTimeandDate = async () => {
 
     for (let i = 0; i < 7; i++) {
         document.getElementById(`Day-${i}-name`).textContent = next7Days[i];
-        //document.getElementById(`Day-${i}-daily-forecast`).textContent = response_daily_json.current.weather_code[i * 24];
+        document.getElementById(`Day-${i}-daily-forecast`).textContent = response_daily_json.current.weather_code[i * 24];
     }
 }
 
@@ -119,11 +127,11 @@ const fetchCurrentTime = async () => {
 
     if (currentHour <= 12) {
         currentHour = `${currentHour}`;
-        document.getElementById('time').textContent = `${currentHour} : ${currentMinute} am`;
+        document.getElementById('time').textContent = `${currentHour}.${currentMinute} am`;
 
     } else {
         currentHour = currentHour - 12;
-        document.getElementById('time').textContent = `${currentHour} : ${currentMinute} pm`;
+        document.getElementById('time').textContent = `${currentHour}.${currentMinute} pm`;
     }
 
     document.getElementById('day').textContent = currentDay;
@@ -146,11 +154,11 @@ const fetchWeatherData = async () => {
         const weather_icon = codetoIcon(weather_code);
         document.getElementById('weather').src = `./assets/images/${weather_icon}`;
         location_var.textContent = document.getElementById('location-name-input').value==""? current_loc : document.getElementById('location-name-input').value;
-        temperature_var.textContent = response_json.hourly.temperature_2m[0];
-        feels_like_var.textContent = response_json.hourly.apparent_temperature[0];
-        humidity_var.textContent = response_json.hourly.relative_humidity_2m[0];
-        wind_speed_var.textContent = response_json.hourly.wind_speed_10m[0];
-        precipitation_var.textContent = response_json.hourly.precipitation_probability[0];
+        temperature_var.textContent = `${response_json.hourly.temperature_2m[0]}°C`;
+        feels_like_var.textContent = `${response_json.hourly.apparent_temperature[0]}°C`;
+        humidity_var.textContent = `${response_json.hourly.relative_humidity_2m[0]}%`;
+        wind_speed_var.textContent = `${response_json.hourly.wind_speed_10m[0]} km/h`;
+        precipitation_var.textContent = `${response_json.hourly.precipitation_probability[0]}%`;
     }
     catch (error) {
         console.error('Fetching weather data error:', error);
@@ -161,7 +169,7 @@ const fetchWeatherData = async () => {
 const form = document.getElementById("location-form");
 
 const init = async () => {
-
+        await loading();
         await fetchCurrentDailyWeather();
         await fetchUserCurrentLocation();
         await getUserCurrentTimeandDate();
