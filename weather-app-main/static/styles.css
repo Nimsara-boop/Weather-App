@@ -73,7 +73,6 @@
 
 .location-form {
     width: 100%;
-
 }
 
 @media (min-width: 768px) {
@@ -97,6 +96,7 @@
     background-repeat: no-repeat;
     width: 100%;
     background-position: 20px center;
+    padding-left: 40px;
 }
 
 .search-input::placeholder {
@@ -147,21 +147,33 @@
 .today-location {
     font-weight: 700;
     font-size: 30px;
+    width: 80%;
+        display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .today-dateandtime {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 100;
+    text-align: center;
 }
 
 .today-temperature {
     font-size: 40px;
     font-weight: 700;
     font-style: italic;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .today-forecast img {
     width: 50%;
+}
+
+.leave-x-gap {
+    margin-right: 5px;
 }
 
 @media (min-width: 768px) {
@@ -169,7 +181,7 @@
         background-image: url('../assets/images/bg-today-small.svg');
         background-size: cover;
         background-repeat: no-repeat;
-        border-radius: 20px;
+        border-radius: 10px;
         color: white;
         font-family: var(--secondary-font);
         font-weight: 500;
@@ -185,17 +197,24 @@
     .today-location {
         font-weight: 700;
         font-size: 30px;
+        text-align: start;
+        display:flex;
+        justify-content: start;
     }
 
     .today-dateandtime {
         font-size: 12px;
         font-weight: 100;
+        text-align: start;
     }
 
     .today-temperature {
         font-size: 40px;
         font-weight: 700;
         font-style: italic;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
     }
 
     .today-forecast img {
@@ -229,6 +248,10 @@
     font-size: 25px;
     font-weight: 100;
     color: rgb(255, 255, 255, 0.8);
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    padding-top:10px;
 }
 
 @media (min-width: 768px) {
@@ -238,7 +261,7 @@
     }
 
     .weather-boxes div {
-        font-size: px;
+        font-size: 25px;
     }
 }
 
@@ -290,7 +313,7 @@
     margin-bottom: 10px;
 }
 
-.hourly-select{
+.hourly-select {
     background-color: var(--primary-color);
     border-radius: 5px;
     border-style: none;
@@ -301,7 +324,7 @@
     font-weight: 500;
 }
 
-.hourly-select option{
+.hourly-select option {
     background-color: rgb(43, 43, 71);
     color: white;
 }
@@ -316,7 +339,7 @@
     border-color: rgb(81, 81, 81);
     border-width: 0.02px;
     border-style: solid;
-    display:flex;
+    display: flex;
     justify-content: space-between;
 }
 
@@ -330,7 +353,7 @@
     padding: 20px;
 }
 
-.hourly-forcast-container{
+.hourly-forcast-container {
     height: 500px;
     overflow-y: scroll;
 }

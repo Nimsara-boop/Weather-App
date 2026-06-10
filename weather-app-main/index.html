@@ -33,24 +33,43 @@
     <!----Navigation bar--->
     <nav class="navbar navbar-expand-lg justify-content-between">
       <img class="navbar-brand" src="./assets/images/logo.svg" alt="logo icon" />
-      <select class="value-change">
+      
+      <select class="value-change" id="unit-switch" name="unit-switch">
         <option value="switch-option">Units</option>
-        <optgroup label="Temperature">
-          <option value="imperial">Celsius (°C)</option>
-          <option value="metric">Fahrenheit (°F)</option>
+        <optgroup label="Temperature" type="radio" id="Temperature-units">
+          <radio value="imperial">Celsius (°C)</option>
+          <radio value="metric">Fahrenheit (°F)</option>
           <hr />
         </optgroup>
-        <optgroup label="Wind Speed">
+        <optgroup label="Wind Speed" type="radio" id="Wind-Speed-units">
           <option value="imperial">km/h</option>
           <option value="metric">mph</option>
           <hr />
         </optgroup>
-        <optgroup label="Precipitation">
+        <optgroup label="Precipitation" type="radio" id="Precipitation-units">
           <option value="imperial">Millimeters (mm)</option>
           <option value="metric">Inches (in)</option>
           <hr />
         </optgroup>
-      </select>
+      </select>  
+
+      <!---
+            <div class="unit-selectors">
+        <select id="temperature-unit">
+          <option value="celsius">Celsius (°C)</option>
+          <option value="fahrenheit">Fahrenheit (°F)</option>
+        </select>
+
+        <select id="windspeed-unit">
+          <option value="kmh">km/h</option>
+          <option value="mph">mph</option>
+        </select>
+
+        <select id="precipitation-unit">
+          <option value="mm">Millimeters (mm)</option>
+          <option value="inches">Inches (in)</option>
+        </select>
+      </div> --->
     </nav>
 
     <!---Search city input--->
@@ -73,11 +92,11 @@
           <div class="row">
             <div class="col-12 col-md-8">
               <div class="today-location"><span id="location-name"></span></div>
-              <div class="today-dateandtime"><span id="time"></span> <span id="day"></span></div>
+              <div class="today-dateandtime"><span id="time" class="leave-x-gap"></span><span id="day"></span><span>, </span><span id="exact-date"></span></div>
             </div>
             <div class="col-12 col-md-4">
-              <h1 class="today-temperature"><img id="weather" src="" alt="Weather icon"><span id="temperature"> </span>
-              </h1>
+              <div class="today-temperature"><img id="weather" src="" alt="Weather icon"><span id="temperature"> </span>
+              </div>
             </div>
           </div>
         </div>
@@ -114,7 +133,8 @@
             <div class="col-4 col-md-1 daily-forcast-day">
               <h6 id="Day-0-name" class="day-name">____</h6>
               <img class="daily-weather-icon" id="icon-day-0-forecast" src="" alt="icon">
-              <div class="justify-content-between"><span id="min-temp-0">__</span> <span id="max-temp-0">__ </span></div>
+              <div class="justify-content-between"><span id="min-temp-0">__</span> <span id="max-temp-0">__ </span>
+              </div>
             </div>
             <div class=" daily-forcast-day">
               <h6 id="Day-1-name">____ </h6>
@@ -156,17 +176,17 @@
           <span class="hourly-header justify-content-between align-items-center d-flex">
             <h3>Hourly forecast</h3>
             <select class="hourly-select" id="hourly-select">
-              <option value="hourly-day-0-name" id="hourly-day-0-name">___</option>
-              <option value="hourly-day-1-name" id="hourly-day-1-name">___</option>
-              <option value="hourly-day-2-name" id="hourly-day-2-name">___</option>
-              <option value="hourly-day-3-name" id="hourly-day-3-name">___</option>
-              <option value="hourly-day-4-name" id="hourly-day-4-name">___</option>
-              <option value="hourly-day-5-name" id="hourly-day-5-name">___</option>
-              <option value="hourly-day-6-name" id="hourly-day-6-name">___</option>
+              <option value="hourly-day-0-value" id="hourly-day-0-name">___</option>
+              <option value="hourly-day-1-value" id="hourly-day-1-name">___</option>
+              <option value="hourly-day-2-value" id="hourly-day-2-name">___</option>
+              <option value="hourly-day-3-value" id="hourly-day-3-name">___</option>
+              <option value="hourly-day-4-value" id="hourly-day-4-name">___</option>
+              <option value="hourly-day-5-value" id="hourly-day-5-name">___</option>
+              <option value="hourly-day-6-value" id="hourly-day-6-name">___</option>
             </select>
           </span>
           <div class="hourly-forcast-container" id="hourly-forecast-container">
-         <!---Duplicated by JS--->
+            <!---Duplicated by JS--->
           </div>
         </div>
       </div>

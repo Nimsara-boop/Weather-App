@@ -3,7 +3,7 @@
 let latitude = "";
 let longitude = "";
 
-let current_col = "";
+let current_loc = "";
 //-----------------Daily Forecast--------------------
 
 //----* ---- function to convert weather codes to icons
@@ -22,7 +22,14 @@ const codetoIcon = (code) => {
     return 'icon-overcast.webp';                       // fallback
 };
 
-const daysoftheweek = []
+const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+let selectedDay = "";
+let selectectedOptionId = "";
+
+let windSpeed = "";
+let precipitation = "";
+
 //----------getting user's date time 
 // ----fetchCurrentDailyWeather()--- 1. , 
 // 1. await navigator.geolocation.getCurrentPosition ----- get the user's current latitude and longitude
@@ -40,13 +47,36 @@ const daysoftheweek = []
 //     document.querySelector('.main-content').classList.remove('loading');
 // }
 
+
+//////   Unit changing Functions  /////////////
+const celciusToFahrentheit = (tempC) => {
+    return (tempC * 9 / 5) + 32;
+}
+const fahrentheitToCelcius = (tempF) => {
+    return (tempF - 32) * 5 / 9;
+}
+const kmhToMph = (windSpeed) => {
+    document.getElementById('wind-speed').textContent = `${speedKmh * 0.621371} mph`;
+}
+const mphToKmh = (windSpeed) => {
+    document.getElementById('wind-speed').textContent = `${speedMph / 0.621371} km/h`;
+}
+const mmToInches = (precipMm) => {
+    return precipMm * 0.0393701;
+}
+const inchesToMm = (precipInches) => {
+    return precipInches / 0.0393701;
+}
+/////////////////////////////////////////////
+
+
 const fetchCurrentDailyWeather = async () => {
 
     //-----1.--- get the user's current lat and lang
     const position = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject);
     });
-
+    
     latitude = position.coords.latitude;
     longitude = position.coords.longitude;
 }
@@ -58,16 +88,19 @@ const fetchUserCurrentLocation = async () => {
     current_loc = response_location_json[0].name;
 }
 
-const getUserCurrentTimeandDate = async () => {
+const getUserCurrentTimeandDateandHourlyData = async () => {
     const now = new Date();
     const nowHour = now.getHours();
     const nowDay = now.getDay();
-    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const exactDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
     const nowDayName = dayNames[nowDay];
+    selectedDay = nowDayName;
+    console.log("1 selectedDay is:", selectedDay);
 
     document.getElementById('day').textContent = nowDayName; // Display current date 
+    document.getElementById('exact-date').textContent = exactDate;
 
-    if (nowHour <= 12) {
+    if (nowHour <= 12) { 
         document.getElementById('time').textContent = `${nowHour}am`;
     }// Display current time
     else { document.getElementById('time').textContent = `${nowHour - 12}pm`; }
@@ -89,9 +122,6 @@ const getUserCurrentTimeandDate = async () => {
         // daily weather
         document.getElementById(`Day-${i}-name`).textContent = next7Days[i];
         document.getElementById(`icon-day-${i}-forecast`).src = `./assets/images/${codetoIcon(response_daily_json.hourly.weather_code[i * 24])}`;
-        // hourly weather day selector
-        document.getElementById(`hourly-day-${i}-name`).textContent = next7Days[i];
-
     }
 
     const container = document.getElementById('hourly-forecast-container');
@@ -113,19 +143,10 @@ const getUserCurrentTimeandDate = async () => {
             </span>
         </div>
         `;
-
-
-        document.getElementById('')
     }
-
-
-
-    // }
 }
 
 const findMinMaxTemp = async () => {
-
-
     const API_weather_daily_URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,apparent_temperature,weather_code`;
     const response_daily = await fetch(API_weather_daily_URL);
     const response_daily_json = await response_daily.json();
@@ -141,9 +162,27 @@ const findMinMaxTemp = async () => {
                 max_temp = response_daily_json.hourly.temperature_2m[j * 24 + i];
             }
         }
-
         document.getElementById(`min-temp-${j}`).textContent = `${Math.round(min_temp)}° `;
         document.getElementById(`max-temp-${j}`).textContent = `${Math.round(max_temp)}°`;
+    }
+}
+
+//---------------Fetch Hourly Data
+const fetchHourlyData = async (selectedDay) => {
+    console.log("2 selectedDay is:", selectedDay);
+    console.log("from the fetchHourlyData function, selectedDay is:", selectedDay);
+    const selectedDayIndex = dayNames.indexOf(selectedDay);
+    console.log("selectedDayIndex from the Day names array is:", selectedDayIndex);
+    for (let i = 0; i < 7; i++) {
+        document.getElementById(`hourly-day-${i}-name`).textContent = dayNames[(selectedDayIndex + i) % 7];
+    }
+    const API_weather_daily_URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,weather_code`;
+    const response_location_and_hourly = await fetch(API_weather_daily_URL);
+    const response_location_and_hourly_json = await response_location_and_hourly.json();
+
+    for (let i = 0; i < 24; i++) {
+        document.getElementById(`hourly-${i}-weather-icon`).src = `./assets/images/${codetoIcon(response_location_and_hourly_json.hourly.weather_code[selectedDayIndex * 24 + i])}`;
+        document.getElementById(`hourly-${i}-temperature`).textContent = `${response_location_and_hourly_json.hourly.temperature_2m[selectedDayIndex * 24 + i]}°C`;
     }
 }
 
@@ -192,9 +231,6 @@ const fetchCurrentTime = async () => {
     }
     document.getElementById('day').textContent = currentDay;
     console.log("Current day is:", currentDay);
-    let nextDays = [];
-    //find currentDay
-    //nextDays.push
 }
 //-----------------Fetching weather data using found latitude and longitudes of the input---------------
 const location_var = document.getElementById('location-name');
@@ -214,6 +250,7 @@ const fetchWeatherData = async () => {
         const weather_icon = codetoIcon(weather_code);
         document.getElementById('weather').src = `./assets/images/${weather_icon}`;
         location_var.textContent = document.getElementById('location-name-input').value == "" ? current_loc : document.getElementById('location-name-input').value;
+        //location_var.textContent = current_loc;
         temperature_var.textContent = `${response_json.hourly.temperature_2m[0]}°C`;
         feels_like_var.textContent = `${response_json.hourly.apparent_temperature[0]}°C`;
         humidity_var.textContent = `${response_json.hourly.relative_humidity_2m[0]}%`;
@@ -230,21 +267,36 @@ const hourlySelect = document.getElementById("hourly-select");
 const init = async () => {
     await fetchCurrentDailyWeather();
     await fetchUserCurrentLocation();
-    await getUserCurrentTimeandDate();
+    await getUserCurrentTimeandDateandHourlyData();
     await fetchCurrentTime();
     await fetchWeatherData();
     await findMinMaxTemp();
+    await fetchHourlyData(selectedDay);
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
         await fetchCityLatLong();
         await fetchWeatherData();
         await fetchCurrentTime();
+        await fetchHourlyData(selectedDay);
     });
 
     hourlySelect.addEventListener('change', async (event) => {
-        const selectedDay = event.target.value;
+        //let selectedDayValue = event.target.ID;
 
+        // find the ID of the selected option
+        let selectedOption = event.target.options[event.target.selectedIndex];
+        selectedOptionId = selectedOption.id;
+
+        // find the text content of the selected option USING the ID
+        selectedDay = document.getElementById(selectedOptionId).textContent;
+
+        // verify the text content of selection before calling the fucntion
+        console.log("Selected option id (hourly-day-x-name) is:", selectedDay);
+
+        event.preventDefault();
+
+        await fetchHourlyData(selectedDay);
     });
 
 }
