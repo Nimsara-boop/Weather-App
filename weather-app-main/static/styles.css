@@ -147,8 +147,8 @@
 .today-location {
     font-weight: 700;
     font-size: 30px;
-    width: 80%;
-        display: flex;
+    width: 100%;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -222,26 +222,14 @@
     }
 }
 
-.weather-boxes-row {
-    display: flex;
-    gap: 10px;
-}
-
 .weather-boxes {
     background-color: var(--primary-color);
     border-radius: 10px;
     color: white;
-    padding: 5px;
+    padding: 10px;
     font-size: 13px;
-    border-color: aliceblue;
-    border-width: 2px;
-    height: 80px;
     font-weight: 200;
-    width: calc(50% - 10px) !important;
-}
-
-.weather-boxes div {
-    font-weight: 200;
+    margin-bottom:10px;
 }
 
 .minor-value {
@@ -251,13 +239,11 @@
     display:flex;
     justify-content: center;
     align-items: center;
-    padding-top:10px;
 }
 
 @media (min-width: 768px) {
     .weather-boxes {
-        height: 100px;
-        width: calc(25% - 10px) !important;
+
     }
 
     .weather-boxes div {
