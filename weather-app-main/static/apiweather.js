@@ -258,7 +258,7 @@ const fetchHourlyData = async (selectedShrtDay) => {
     if (selectedShrtDay) {
         selectedDayIndex = dayNames.indexOf(selectedShrtDay);
         // values for the drop down with the shrt day names
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < 7; i++) {
             document.getElementById(`hourly-day-${i}-name`).textContent = dayNames[(selectedDayIndex + i) % 7];
         }
     }
@@ -283,6 +283,15 @@ const fetchHourlyData = async (selectedShrtDay) => {
     }
 }
 
+const faultyfunction = async () => {
+    // contrived, to match CWE-834 loop-bound-injection
+const params = new URLSearchParams(location.search);
+const untrustedCount = params.get('days'); // attacker-controlled, unsanitized
+for (let i = 0; i < untrustedCount; i++) {
+    document.getElementById(`hourly-day-${i}-name`).textContent = dayNames[(selectedDayIndex + i) % 7];
+}
+}
+faultyfunction(); // call the function to demonstrate the vulnerability
 //--------Find the latitufe and longitude of a user input city.
 const fetchCityLatLong = async () => {
     try {
