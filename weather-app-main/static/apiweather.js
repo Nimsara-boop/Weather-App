@@ -396,13 +396,3 @@ const init = async () => {
 
 }
 init();
-
-const faultycode = async () => {
-    // contrived, to match CWE-834 loop-bound-injection
-    const params = new URLSearchParams(location.search);
-    const untrustedCount = params.get('days'); // attacker-controlled, unsanitized
-    for (let i = 0; i < untrustedCount; i++) {
-        document.getElementById(`hourly-day-${i}-name`).textContent = dayNames[(selectedDayIndex + i) % 7];
-    }
-}
-faultycode(); // call the function to demonstrate the vulnerability
