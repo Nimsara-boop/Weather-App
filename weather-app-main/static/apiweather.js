@@ -258,7 +258,7 @@ const fetchHourlyData = async (selectedShrtDay) => {
     if (selectedShrtDay) {
         selectedDayIndex = dayNames.indexOf(selectedShrtDay);
         // values for the drop down with the shrt day names
-        for (let i = 0; i < 7; i++) {
+        for (let i = 0; i < 8; i++) {
             document.getElementById(`hourly-day-${i}-name`).textContent = dayNames[(selectedDayIndex + i) % 7];
         }
     }
